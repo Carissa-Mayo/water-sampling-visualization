@@ -23,9 +23,3 @@ End to end pipeline that pulls surface water chemistry samples, standardizes sit
 4. **Aggregate** to monthly summaries (per site, per analyte).
 5. **Analyze** simple comparisons (seasonal mean differences).
 6. **Export** final tables for Tableau / reporting.
-
-___
-
-## Results/Dashboard Overview
-
-1. Hypothesis Testing: Nitrate groundwater samples show stroong evidence for seasonal patterns in presence. With a positive effect of 1.833 and p-value < 0.005, summer trends are much higher than winter trends. 
