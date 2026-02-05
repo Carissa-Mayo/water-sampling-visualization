@@ -15,7 +15,6 @@ SEED = 7
 rng = np.random.default_rng(SEED)
 
 def read_wqp(path: str) -> pd.DataFrame:
-    # WQP files are CSV with quoted strings
     return pd.read_csv(path, dtype=str, low_memory=False)
 
 def to_float(x):
@@ -167,20 +166,17 @@ def tidy_results(df: pd.DataFrame, chemical: str) -> pd.DataFrame:
         "value_raw": df.get("ResultMeasureValue").map(to_float),
         "rl_raw": df.get("DetectionQuantitationLimitMeasure/MeasureValue").map(to_float),
         "detect_condition": df.get("ResultDetectionConditionText"),
-        # pull whatever exists
         "activity_media": df.get("ActivityMediaName"),
         "activity_media_sub": df.get("ActivityMediaSubdivisionName"),
         "location_type": df.get("MonitoringLocationTypeName"),
     })
 
-    # your existing ND logic stays as is
     out["is_nondetect"] = out["detect_condition"].fillna("").str.lower().str.contains("not detected")
     out["value_for_stats"] = np.where(out["is_nondetect"] & ~np.isnan(out["rl_raw"]),
                                       out["rl_raw"] / 2.0,
                                       out["value_raw"])
     out["sample_date"] = out["sample_date"].dt.date
 
-    # classify water type using whatever fields you have
     txt = (
         out["activity_media_sub"].fillna("") + " " +
         out["location_type"].fillna("") + " " +
